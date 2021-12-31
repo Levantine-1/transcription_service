@@ -6,18 +6,33 @@ l = logging.getLogger(__name__)
 
 def compile_pocket_phynx_lines(raw_transcript):
     constructed_lines = []
-    indexes = (len(raw_transcript))
-    last_index = 1
-
-    while last_index < (indexes - 1):
-        index, \
+    raw_transcript_indexes = (len(raw_transcript))
+    raw_transcript_last_index = 1
+    output_index = 0
+    while raw_transcript_last_index < (raw_transcript_indexes - 1):
+        raw_transcript_current_index, \
             line_start_time, \
             line_end_time, \
             line_duration, \
-            line = compile_pocket_phynx_line(raw_transcript, start_index=last_index, indexes=indexes)
+            line = compile_pocket_phynx_line(raw_transcript,
+                                             start_index=raw_transcript_last_index,
+                                             indexes=raw_transcript_indexes)
 
-        last_index = index
-        l.info(line)
+        line_entry = {"index": output_index,
+                      "line_start_time": line_start_time,
+                      "line_end_time": line_end_time,
+                      "line_duration": line_duration,
+                      "line": line
+                      }
+
+        raw_transcript_last_index = raw_transcript_current_index
+        output_index = output_index + 1
+
+        if line == '':
+            continue
+
+        constructed_lines.append(line_entry)
+    return constructed_lines
 
 
 def compile_pocket_phynx_line(raw_transcript, start_index, indexes):
@@ -38,6 +53,7 @@ def compile_pocket_phynx_line(raw_transcript, start_index, indexes):
         if word in ignore_words:
             continue
         elif word != sil_str:
+            word = truncate_string(word)
             line.append(word)
         elif word == sil_str:
             if sil_encountered == False:
@@ -54,6 +70,13 @@ def compile_pocket_phynx_line(raw_transcript, start_index, indexes):
 
     line = concat_list_to_string(list_of_string=line)
     return index, line_start_time, line_end_time, line_duration, line
+
+
+def truncate_string(string):
+    truncate_list = json.loads(config.get['pocket_sphinx']['truncate_words'])
+    for entry in truncate_list:
+        string = string.replace(entry, '')
+    return string
 
 
 def concat_list_to_string(list_of_string):
