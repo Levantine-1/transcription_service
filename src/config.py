@@ -13,5 +13,4 @@ except IndexError:
     else:
         print("No config file found")
 
-# Global Variables
-a = 1
+# You can define global variables below:

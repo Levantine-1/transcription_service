@@ -4,7 +4,7 @@ import config
 l = logging.getLogger(__name__)
 
 
-def compile_pocket_phynx_lines(raw_transcript):
+def compile_pocket_sphinx_lines(raw_transcript):
     constructed_lines = []
     raw_transcript_indexes = (len(raw_transcript))
     raw_transcript_last_index = 1
@@ -14,7 +14,7 @@ def compile_pocket_phynx_lines(raw_transcript):
             line_start_time, \
             line_end_time, \
             line_duration, \
-            line = compile_pocket_phynx_line(raw_transcript,
+            line = compile_pocket_sphinx_line(raw_transcript,
                                              start_index=raw_transcript_last_index,
                                              indexes=raw_transcript_indexes)
 
@@ -35,7 +35,7 @@ def compile_pocket_phynx_lines(raw_transcript):
     return constructed_lines
 
 
-def compile_pocket_phynx_line(raw_transcript, start_index, indexes):
+def compile_pocket_sphinx_line(raw_transcript, start_index, indexes):
     ignore_words = json.loads(config.get['pocket_sphinx']['ignore_words'])
     sil_str = config.get['pocket_sphinx']['sil_str']
     line = []
