@@ -1,6 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
-import config, transcriber, line_compiler
+import config, line_compiler, srt_generator
 
 # Setup logging
 logfile = config.get['logging']['logfile']
@@ -30,6 +30,10 @@ def function1():
     transcript = line_compiler.compile_pocket_sphinx_lines(raw_transcript)
     for entry in transcript:
         l.info(entry)
+
+    data = srt_generator.generate_srt(transcript)
+    if srt_generator.save_result_to_file("result", data):
+        l.info("Successfully saved SRT file. Exiting application")
 
 
 if __name__ == '__main__':

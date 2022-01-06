@@ -1,4 +1,5 @@
 import logging, json
+
 import config
 
 l = logging.getLogger(__name__)
@@ -33,7 +34,6 @@ def compile_pocket_sphinx_lines(raw_transcript):
 
         constructed_lines.append(line_entry)
     return constructed_lines
-
 
 def compile_pocket_sphinx_line(raw_transcript, start_index, indexes):
     ignore_words = json.loads(config.get['pocket_sphinx']['ignore_words'])
@@ -84,3 +84,5 @@ def concat_list_to_string(list_of_string):
     final_list = newlist.join(list_of_string)
     l.debug(final_list)
     return final_list
+
+
